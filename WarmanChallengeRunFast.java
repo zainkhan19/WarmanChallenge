@@ -11,36 +11,32 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Config
 @TeleOp(group = "drive")
-public class WarmanChallengeRun extends LinearOpMode {
+public class WarmanChallengeRunFast extends LinearOpMode {
     public Servo leftServo;
     public Servo rightServo;
-    ColorSensor color;
-    int trigger = 0;
-
 
     @Override
     public void runOpMode() {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        color = hardwareMap.get(ColorSensor.class, "Colour");
+
         leftServo = hardwareMap.get(Servo.class, "LeftServo");
         rightServo = hardwareMap.get(Servo.class, "RightServo");
+
 
 
         Pose2d startPose = new Pose2d(0, 0, 0);
 
         drive.setPoseEstimate(startPose);
 
-
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
 
-                // todo - initialize start (straight speed to 25% and turn speeds to 50%)
+                // todo - initialize start (straight speed to 50% and turn speeds to 50%)
 
-                .setConstraints(SampleMecanumDrive.getVelocityConstraint(12,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(12))
+                .setConstraints(SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(25))
                 .setTurnConstraint(Math.toRadians(70),Math.toRadians(70))
                 .forward(3.5) // initialize start
 
@@ -70,9 +66,9 @@ public class WarmanChallengeRun extends LinearOpMode {
 
                 .turn(Math.toRadians(-7)) // turn to straighten again wall
 
-                .strafeRight(14.8) // strafe to second ball
+                .strafeRight(15.4) // strafe to second ball
 
-                .waitSeconds(0.2) // wait for stability
+                .waitSeconds(0.5) // wait for stability
 
                 // todo - intake second ball
 
@@ -107,17 +103,17 @@ public class WarmanChallengeRun extends LinearOpMode {
 
                 .turn(Math.toRadians(7)) // correction turn
 
-                .waitSeconds(0.5)
+                .waitSeconds(1)
 
 
                 // todo - intake third ball
 
-                .forward(0.7) // move forward to intake ball
+                .forward(1.8) // move forward to intake ball
 
                 // lower intake arm to 0 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0))
                 .addTemporalMarker(() -> rightServo.setPosition(1))
-                .waitSeconds(1.4)
+                .waitSeconds(1.7)
 
                 // raise intake arm to 30 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0.3))
@@ -136,12 +132,16 @@ public class WarmanChallengeRun extends LinearOpMode {
 
                 // todo - transition to fourth ball
 
-                .back(7)
-                .turn(Math.toRadians(181)) // correction turn
+                .setConstraints(SampleMecanumDrive.getVelocityConstraint(12,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(12))
+                .back(8)
+                .setTurnConstraint(Math.toRadians(150),Math.toRadians(150))
+                .turn(Math.toRadians(177)) // correction turn
                 .waitSeconds(0.5)
+                .setTurnConstraint(Math.toRadians(70),Math.toRadians(70))
                 .forward(20)
-                .turn(Math.toRadians(8)) // correction turn
-                .waitSeconds(0.2)
+                .turn(Math.toRadians(14.2)) // correction turn
+
+                .setConstraints(SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), SampleMecanumDrive.getAccelerationConstraint(25))
 
                 // todo - intake fourth ball
 
@@ -153,19 +153,18 @@ public class WarmanChallengeRun extends LinearOpMode {
                 // raise intake arm to 30 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0.3))
                 .addTemporalMarker(() -> rightServo.setPosition(0.8))
-                .waitSeconds(0.5)
+                .waitSeconds(0.8)
 
                 // raise intake arm to 50 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0.4))
                 .addTemporalMarker(() -> rightServo.setPosition(0.7))
-                .waitSeconds(0.5)
+                .waitSeconds(0.8)
 
                 // todo - transition to fifth ball
 
-                .back(2.5)
+                .back(2)
                 .turn(Math.toRadians(-7.5))
-                .strafeRight(12.5) // strafe to fifth ball
-
+                .strafeRight(13.8) // strafe to fifth ball
 
                 // todo - intake fifth ball
 
@@ -176,14 +175,14 @@ public class WarmanChallengeRun extends LinearOpMode {
 
 
                 // raise intake arm to 50 degrees
-                .addTemporalMarker(() -> leftServo.setPosition(0.375))
-                .addTemporalMarker(() -> rightServo.setPosition(0.725))
-                .waitSeconds(0.5)
-
-                // raise intake arm to 50 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0.4))
                 .addTemporalMarker(() -> rightServo.setPosition(0.7))
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+
+                // raise intake arm to 50 degrees
+                .addTemporalMarker(() -> leftServo.setPosition(0.5))
+                .addTemporalMarker(() -> rightServo.setPosition(0.6))
+                .waitSeconds(1)
 
                 // raise intake arm to 90 degrees
                 .addTemporalMarker(() -> leftServo.setPosition(0.6))
@@ -193,7 +192,7 @@ public class WarmanChallengeRun extends LinearOpMode {
                 // todo - transition to sixth ball
 
                 .strafeRight(13.45) // strafe to fifth ball
-                .forward(1.1) // move forward to intake ball
+                //.back(0.5) // move forward to intake ball
 
                 // todo - Intake sixth ball
 
@@ -217,26 +216,19 @@ public class WarmanChallengeRun extends LinearOpMode {
                 .resetConstraints()
                 .resetTurnConstraint()
                 .back(4)
-                .strafeLeft(1.3)
-                .turn(Math.toRadians(70))
-                .turn(Math.toRadians(-65))
-                .forward(3)
-                .back(3)
+                .strafeLeft(2)
+                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
+                .forward(4)
+                .back(4)
 
                 .build();
-
 
         waitForStart();
 
         if (!isStopRequested())
-            while (getRuntime() < 10000) {
-                if(color.red() > 1000 && color.green() > 1000 && color.blue() > 1000) {
-                    trigger = 1;
-                }
-                if( trigger == 1) {
-                    drive.followTrajectorySequence(trajSeq);
-                    trigger = 0;
-                }
-            }
+            drive.followTrajectorySequence(trajSeq);
+
+
     }
 }
